@@ -29,9 +29,12 @@ while True:
 
 
   # Visualise the elements
+  screen.fill(bg_color)
   pygame.draw.rect(screen, ligth_grey, player)
   pygame.draw.rect(screen, ligth_grey, opponent)
   pygame.draw.rect(screen, ligth_grey, ball)
+  pygame.draw.aaline(screen, ligth_grey, (screen_width/2,0), (screen_width/2,screen_height))
+
 
   # loop update    
   pygame.display.flip()
