@@ -13,6 +13,12 @@ def ball_animation():
     if ball.colliderect(player) or ball.colliderect(opponent):
       ball_speed_x *= -1
 
+def player_animation():
+  player.y += player_speed
+  if player.top <= 0:
+    player.top = 0
+  if player.bottom >= screen_height:
+    player.bottom = screen_height
 
 # setup fo the basic game needs
 pygame.init()
@@ -57,7 +63,7 @@ while True:
         player_speed -= 7
 
   ball_animation()
-  player.y += player_speed
+  player_animation()
 
   # Visualise the elements
   screen.fill(bg_color)
