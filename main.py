@@ -16,12 +16,23 @@ player = pygame.Rect(screen_width - 20, screen_height/2 - 70, 10, 140)
 opponent = pygame.Rect(10, screen_height/2 - 70, 10, 140)
 
 
+# colors
+bg_color = pygame.Color('grey12')
+ligth_grey = (200, 200, 200)
+
 # server loop
 while True:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       pygame.quit()
       sys.exit()
-      
+
+
+  # Visualise the elements
+  pygame.draw.rect(screen, ligth_grey, player)
+  pygame.draw.rect(screen, ligth_grey, opponent)
+  pygame.draw.rect(screen, ligth_grey, ball)
+
+  # loop update    
   pygame.display.flip()
   clock.tick(60)
