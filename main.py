@@ -1,17 +1,26 @@
 import pygame, sys, random
 
 def ball_animation():
-    global ball_speed_x, ball_speed_y
+    global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
     ball.x += ball_speed_x
     ball.y += ball_speed_y
 
     if ball.top <= 0 or ball.bottom >= screen_height:
         ball_speed_y *= -1
-    if ball.left <= 0 or ball.right >= screen_width:
-      ball_restart()
 
-    if ball.colliderect(player) or ball.colliderect(opponent):
-      ball_speed_x *= -1
+    if ball.left <= 0:
+      player_score += 1
+      score_time = pygame.time.get_ticks()
+
+    if ball.right >= screen_width:
+      opponent_score += 1
+      score_time = pygame.time.get_ticks()
+
+    if ball.colliderect(player) and ball_speed_x > 0: 
+      if abs(ball.right - player.left) < 10:
+        ball_speed_x *= -1
+      elif abs(ball.bottom - player.top) < 10 and ball_speed_y > 10:
+        ball_speed_y *= 1
 
 def player_animation():
   player.y += player_speed
@@ -31,14 +40,29 @@ def opponent_animation():
     opponent.bottom = screen_height
 
 def ball_restart():
-  global ball_speed_x, ball_speed_y
-  ball.center = (screen_width/2, screen_height/2)
-  ball_speed_y *= random.choice((1, -1))
-  ball_speed_x *= random.choice((1, -1))
+    global ball_speed_x, ball_speed_y, score_time
 
-# setup fo the basic game needs
+    current_time = pygame.time.get_ticks()
+    ball.center = (screen_width / 2, screen_height / 2)
+
+    # Countdown logic --remove for teaching
+    if current_time - score_time < 700:
+        number_three = game_font.render("3", False, ligth_grey)
+        screen.blit(number_three, (screen_width / 2 - 10, screen_height / 2 + 10))
+    elif 700 < current_time - score_time < 1400:
+        number_two = game_font.render("2", False, ligth_grey)
+        screen.blit(number_two, (screen_width / 2 - 10, screen_height / 2 + 10))
+    elif 1400 < current_time - score_time < 2100:
+        number_one = game_font.render("1", False, ligth_grey)
+        screen.blit(number_one, (screen_width / 2 - 10, screen_height / 2 + 10))
+
+    if current_time - score_time > 2100:
+        ball_speed_y *= random.choice((1, -1))
+        ball_speed_x *= random.choice((1, -1))
+        score_time = None
+
 pygame.init()
-clock = pygame.time.Clock()
+clock = pygame.time.Clock ()
 
 # main window settings
 screen_width = 1280
