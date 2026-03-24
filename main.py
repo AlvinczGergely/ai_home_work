@@ -2,8 +2,10 @@ import pygame, sys, random
 
 def ball_animation():
     global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
-    ball.x += ball_speed_x
-    ball.y += ball_speed_y
+
+    if not score_time:
+      ball.x += ball_speed_x
+      ball.y += ball_speed_y
 
     if ball.top <= 0 or ball.bottom >= screen_height:
         ball_speed_y *= -1
@@ -58,13 +60,13 @@ def ball_restart():
     # Countdown logic --remove for teaching
     if current_time - score_time < 700:
         number_three = game_font.render("3", False, ligth_grey)
-        screen.blit(number_three, (screen_width / 2 - 10, screen_height / 2 + 10))
+        screen.blit(number_three, (screen_width / 2 - 10, screen_height / 2 + 20))
     elif 700 < current_time - score_time < 1400:
         number_two = game_font.render("2", False, ligth_grey)
-        screen.blit(number_two, (screen_width / 2 - 10, screen_height / 2 + 10))
+        screen.blit(number_two, (screen_width / 2 - 10, screen_height / 2 + 20))
     elif 1400 < current_time - score_time < 2100:
         number_one = game_font.render("1", False, ligth_grey)
-        screen.blit(number_one, (screen_width / 2 - 10, screen_height / 2 + 10))
+        screen.blit(number_one, (screen_width / 2 - 10, screen_height / 2 + 20))
 
     if current_time - score_time > 2100:
         ball_speed_y *= random.choice((1, -1))
@@ -129,7 +131,7 @@ while True:
   screen.fill(bg_color)
   pygame.draw.rect(screen, ligth_grey, player)
   pygame.draw.rect(screen, ligth_grey, opponent)
-  pygame.draw.rect(screen, ligth_grey, ball)
+  pygame.draw.circle(screen, ligth_grey, ball.center, ball.width // 2)
   pygame.draw.aaline(screen, ligth_grey, (screen_width/2,0), (screen_width/2,screen_height))
 
   if score_time:
