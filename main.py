@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, random
 
 def ball_animation():
     global ball_speed_x, ball_speed_y
@@ -30,6 +30,12 @@ def opponent_animation():
   if opponent.bottom >= screen_height:
     opponent.bottom = screen_height
 
+def ball_restart():
+  global ball_speed_x, ball_speed_y
+  ball.center = (screen_width/2, screen_height/2)
+  ball_speed_y *= random.choice((1, -1))
+  ball_speed_x *= random.choice((1, -1))
+
 # setup fo the basic game needs
 pygame.init()
 clock = pygame.time.Clock()
@@ -51,12 +57,20 @@ bg_color = pygame.Color('grey12')
 ligth_grey = (200, 200, 200)
 
 # fizik data
-ball_speed_x = 7
-ball_speed_y = 7
+ball_speed_x = 7 * random.choice((1, -1))
+ball_speed_y = 7 * random.choice((1, -1))
 player_speed = 0
 opponent_speed = 7
 
-# server loop
+# text variables
+player_score = 0
+opponent_score = 0
+game_font = pygame.font.Font("freesansbold.ttf", 32)
+
+# time managemant
+score_time = True
+
+# game loop
 while True:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
@@ -84,6 +98,14 @@ while True:
   pygame.draw.rect(screen, ligth_grey, ball)
   pygame.draw.aaline(screen, ligth_grey, (screen_width/2,0), (screen_width/2,screen_height))
 
+  if score_time:
+    ball_restart()
+
+  player_text = game_font.render(f"{player_score}", False, ligth_grey)
+  screen.blit(player_text, (660,20))
+
+  opponent_text = game_font.render(f"{opponent_score}", False, ligth_grey)
+  screen.blit(opponent_text, (600,20))
 
   # loop update    
   pygame.display.flip()
