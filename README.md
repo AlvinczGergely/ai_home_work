@@ -26,4 +26,45 @@ A második lépésben irodalomkutatást végeztem két fő területen: AI  meger
 
 ## 2. lépés: AI Képzés és Evolúció
 
-under development
+### 2.1 Config file
+   ### [Neat]
+      1. fitness_criterion: kritirium ertek(jelen allapotban max)
+      2. fitness_threshold: amint elerjuk az erteket az adott tanitas megall
+      3. pop_size: egyedek szama generacioneknt
+      4. reset_on_extrapolation: 
+   ### [DefaultGenome]
+      1. num_inputs: bemenetek szama(lambda_x, labda_y, uto_y)
+      2. num_outputs: amit az ai tanul(mozgas y+, y-)
+      3. num_hidden: rejtett nodok szama(ha nulla miert kell megadni?)
+      4. feed_forward: ha true akkor a generalt halo nem lehet ujrakapacsolatos
+      5. initial_connection: ujjonan letrejovo genomok kapcsolodasa(full->nics hidden nodom szoval nem fog jelezni)
+
+   #### Activation
+      6. activation_default: alapertelmezett aktivacios fuggveny parameter, alapbol random
+      7. activation_mutate_rate: valszinusege, hogy mutacio lecsereli az aktivacios fuggvenyt erteket randomra
+      8. activation_options: csomopontok altal hasznalhato aktivacios fuggvenyt szspace-el elvalasztott listaja????
+
+   #### Node Bias
+      9. bias_init_stdev: gauss eloszlas erteke uj csomopontok kivalasztasahoz
+      10. bias_mutate_rate: valoszinusege a mutacionak random ertek szerinte
+      11. bias_replace_rate: valoszinusege a mutacio cserenek random ertek szerinte
+
+   #### Connection Weights
+      12. weight_init_stdev: uj kapcsolatokhoz hasznalt disztribucio gausz eloszlasnal
+      13. weight_mutate_rate: valoszinusege a mutacio soran suly valtozasnak
+
+   #### Structural Mutation
+      14. conn_add_prob: eselye a kapcsolatnak mutacio kozben(1 es1 kozott, 0.5 lett random)
+      15. conn_delete_prob: kapcsoalt torlese mutacio sora (1 es1 kozott, 0.5 lett random)
+      16. enabled_default: ujjonan letrejovo kapcsolatok engedejezese(jelen esetben true)
+
+   ### [DefaultSpeciesSet]
+      1. compatibility_threshold = fajhoz sorolas genomialis ertek alapjan ????
+
+   ### [DefaultStagnation]
+      1. species_fitness_func: egyedek fittnes meresere hasznalt fuggveny(alapbol "mean")
+      2. max_stagnation: kuszobertek, ha elerjuk es nem fejlodott egy csalad elkaszaljuk az egeszet
+
+   ### [DefaultReproduction]
+      1. elitism: legfitteb egyedek szama amiket megtartunk kovetlkezo generaciora
+      2. survival_threshold: fajok hanyada amiket engedunk szaporodni generacionkent
