@@ -1,4 +1,22 @@
-import pygame, sys, random
+import pygame 
+import sys 
+import random
+import neat
+
+def eval_genomes(genomes, config):
+    nets = []
+    ge = []
+    paddles = []
+    balls = []    # -->minden ai sajat labdaval tanuljon
+    """
+    for -> evoluciok kezelese
+
+    todo:
+      - halozatok letrehozasa
+      - fitnes kalkulalas
+      - kornyezet reremtes minden egyes ai-nak
+    """
+
 
 def ball_animation():
     global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
