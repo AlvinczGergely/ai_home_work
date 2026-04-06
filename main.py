@@ -5,12 +5,57 @@ import neat
 import os
 
 
+def train_ai(self, genome1, genome2, copnfig):
+  net1 = neat.nn.FeedForwardNetwork.create(genome1, config)
+  net2 = neat.nn.FeedForwardNetwork.create(genome2, config)
+  
+  run = True
+  while run: 
+    for event in ptgame.event.get():
+      if event.type == pygame.QUIT:
+        quit()
+      
+    output1 = net1.activate((self.left_paddle.y, self.ball.y, abs(self.left_paddle.x - self.ball.x)))
+    output2 = net1.activate((self.rigth_paddle.y, self.ball.y, abs(self.rigth_paddle.x - self.ball.x)))
+      
+    game_info = self.game.loop()
+    self.game.draw()
+    pygame.display.update()
+    
+    if game_info.left_score >= 1 or game_info.rigth_score >=1:
+      self.calculate_fittnes(genome1, genome2, game_info)
+      break
+
+def calculate_fittnes(self, genome1, genom2):
+  pass
+    
+    
+    
+    
+
+def eval_genomes(genomes, config):
+  width, height = 700, 500
+  width = pygame.disyplay.set_mode((width, height))
+  
+  for i, (genome_id1, genome1) in enumerate(genomes):
+    if i == len(genomes) - 1:
+      break
+    genome1.fittnes = 0
+    for genome_id2, genome2 in genomes[i+1:]:         #same genome dos not play egainst itself
+      genome2.fittness = 0 if genomes2.fittness == None else genome2.fittness
+      game = PongGame(window, width, length)
+      game.train_ai(genome1, genome2, config)
+  
+  
+  
 def run_neat(config):
   p = neat.Population(config)
   p.add_reporter(neat.StdReporter(True))
   status = neat.StatisticsReporter()
   p.add_reporter(status)
   p.add_reporter(neat.Checkpointer(1))
+  
+  winner = p.run(eval_genomes, 50)
 
 if __name__== "__main__":
   loca_dir = os.path.dirname(__file__)
