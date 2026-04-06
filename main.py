@@ -2,20 +2,24 @@ import pygame
 import sys 
 import random
 import neat
+import os
 
-def eval_genomes(genomes, config):
-    nets = []
-    ge = []
-    paddles = []
-    balls = []    # -->minden ai sajat labdaval tanuljon
-    """
-    for -> evoluciok kezelese
 
-    todo:
-      - halozatok letrehozasa
-      - fitnes kalkulalas
-      - kornyezet reremtes minden egyes ai-nak
-    """
+def run_neat(config):
+  p = neat.Population(config)
+  p.add_reporter(neat.StdReporter(True))
+  status = neat.StatisticsReporter()
+  p.add_reporter(status)
+  p.add_reporter(neat.Checkpointer(1))
+
+if __name__== "__main__":
+  loca_dir = os.path.dirname(__file__)
+  config_path = os.path.join(local_dir, "config.txt")
+  
+  config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                         neat.DefaultSpeciesSet, neat.DefaultStagnation,
+                         config_file)
+  run_neat(config)
 
 
 def ball_animation():
@@ -164,3 +168,4 @@ while True:
   # loop update    
   pygame.display.flip()
   clock.tick(60)
+
