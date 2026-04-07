@@ -16,23 +16,39 @@ def train_ai(self, genome1, genome2, copnfig):
         quit()
       
     output1 = net1.activate((self.left_paddle.y, self.ball.y, abs(self.left_paddle.x - self.ball.x)))
+    decision1 = output1.index(max(output1))
+
+    if decision1 == 0:
+      pass
+    elif decision1 == 1:
+      self.game.move_paddle(lest=False, up=True)
+    else:
+      self.game.move_paddle(lest=True, up=False)
+
     output2 = net1.activate((self.rigth_paddle.y, self.ball.y, abs(self.rigth_paddle.x - self.ball.x)))
-      
+    decision2 = output2.index(max(output2))  
+
+    if decision2 == 0:
+      pass
+    elif decision2 == 1:
+      self.game.move_paddle(lest=True, up=True)
+    else:
+      self.game.move_paddle(lest=False, up=False)
+
+
     game_info = self.game.loop()
     self.game.draw()
     pygame.display.update()
     
-    if game_info.left_score >= 1 or game_info.rigth_score >=1:
+    if game_info.left_score >= 1 or game_info.rigth_score >=1 or game_info.left_hits > 50:
       self.calculate_fittnes(genome1, genome2, game_info)
       break
 
 def calculate_fittnes(self, genome1, genom2):
-  pass
+  genome1.fitness += game_info.lef_hits
+  genome2.fitness += game_info.rigth_hits
     
-    
-    
-    
-
+ 
 def eval_genomes(genomes, config):
   width, height = 700, 500
   width = pygame.disyplay.set_mode((width, height))
