@@ -78,7 +78,7 @@ def train_ai(self, genome1, genome2, copnfig):
       self.calculate_fitness(genome1, genome2, game_info)
       break
 
-def calculate_fitness(self, genome1, genom2):
+def calculate_fitness(self, genome1, genome2):
   genome1.fitness += game_info.lef_hits
   genome2.fitness += game_info.right_hits
     
@@ -108,12 +108,12 @@ def run_neat(config):
   winner = p.run(eval_genomes, 50)
 
 if __name__== "__main__":
-  loca_dir = os.path.dirname(__file__)
+  local_dir = os.path.dirname(__file__)
   config_path = os.path.join(local_dir, "config.txt")
   
   config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                         config_file)
+                         config_path)
   run_neat(config)
 
 
