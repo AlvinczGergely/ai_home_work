@@ -19,6 +19,18 @@ class PongGame:
         self.right_score = 0
         self.left_hits = 0
         self.right_hits = 0
+
+    def move_paddle(self, left=True, up=True):
+        if left:
+            if up and self.left_paddle.top > 0:
+                self.left_paddle.y -= 7
+            elif not up and self.left_paddle.bottom < self.height:
+                self.left_paddle.y += 7
+        else:
+            if up and self.right_paddle.top > 0:
+                self.right_paddle.y -= 7
+            elif not up and self.right_paddle.bottom < self.height:
+                self.right_paddle.y += 7
 def train_ai(self, genome1, genome2, copnfig):
   net1 = neat.nn.FeedForwardNetwork.create(genome1, config)
   net2 = neat.nn.FeedForwardNetwork.create(genome2, config)
