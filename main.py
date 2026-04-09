@@ -112,7 +112,7 @@ def train_ai(genome1, genome2, config, window, width, height):
       calculate_fitness(genome1, genome2, game_info)
       break
 
-def calculate_fitness(game_info, genome1, genome2):
+def calculate_fitness(genome1, genome2, game_info):
   genome1.fitness += game_info.left_hits
   genome2.fitness += game_info.right_hits
     
@@ -124,7 +124,7 @@ def eval_genomes(genomes, config):
   for i, (genome_id1, genome1) in enumerate(genomes):
     if i == len(genomes) - 1:
       break
-    genome1.fittnes = 0
+    genome1.fitness = 0
     for genome_id2, genome2 in genomes[i+1:]:         #same genome dos not play egainst itself
       genome2.fitness = 0 if genome2.fitness == None else genome2.fitness
       train_ai(genome1, genome2, config, window, width, height)
