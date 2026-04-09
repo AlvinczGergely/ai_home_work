@@ -15,6 +15,9 @@ class PongGame:
         self.right_paddle = pygame.Rect(width - 20, height/2 - 70, 10, 140)
         self.ball = pygame.Rect(width/2 - 15, height/2 - 15, 30, 30)
         
+        self.ball_speed_x = 7 * random.choice((1, -1))
+        self.ball_speed_y = 7 * random.choice((1, -1))
+
         self.left_score = 0
         self.right_score = 0
         self.left_hits = 0
