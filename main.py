@@ -69,9 +69,10 @@ class PongGame:
 
 
 
-def train_ai(self, genome1, genome2, config, window, width, height):
+def train_ai(genome1, genome2, config, window, width, height):
   net1 = neat.nn.FeedForwardNetwork.create(genome1, config)
   net2 = neat.nn.FeedForwardNetwork.create(genome2, config)
+  game = PongGame(window, width, height)
   
   run = True
   while run: 
@@ -79,58 +80,57 @@ def train_ai(self, genome1, genome2, config, window, width, height):
       if event.type == pygame.QUIT:
         quit()
       
-    output1 = net1.activate((self.left_paddle.y, self.ball.y, abs(self.left_paddle.x - self.ball.x)))
+    output1 = net1.activate((game.left_paddle.y, game.ball.y, abs(game.left_paddle.x - game.ball.x)))
     decision1 = output1.index(max(output1))
 
     if decision1 == 0:
       pass
     elif decision1 == 1:
-      self.game.move_paddle(left=False, up=True)
+      game.move_paddle(left=False, up=True)
     else:
-      self.game.move_paddle(left=True, up=False)
+      game.move_paddle(left=True, up=False)
 
-    output2 = net1.activate((self.right_paddle.y, self.ball.y, abs(self.right_paddle.x - self.ball.x)))
+    output2 = net1.activate((game.right_paddle.y, game.ball.y, abs(game.right_paddle.x - game.ball.x)))
     decision2 = output2.index(max(output2))  
 
     if decision2 == 0:
       pass
     elif decision2 == 1:
-      self.game.move_paddle(lest=True, up=True)
+      game.move_paddle(left=True, up=True)
     else:
-      self.game.move_paddle(lest=False, up=False)
+      game.move_paddle(left=False, up=False)
 
 
-    game_info = self.game.loop()
-    self.game.draw()
+    game_info = game.loop()
+    game.draw()
     pygame.display.update()
     
     if game_info.left_score >= 1 or game_info.right_score >=1 or game_info.left_hits > 50:
-      self.calculate_fitness(genome1, genome2, game_info)
+      calculate_fitness(genome1, genome2, game_info)
       break
 
-def calculate_fitness(self, genome1, genome2):
-  genome1.fitness += game_info.lef_hits
+def calculate_fitness(game_info, genome1, genome2):
+  genome1.fitness += game_info.left_hits
   genome2.fitness += game_info.right_hits
     
  
 def eval_genomes(genomes, config):
   width, height = 700, 500
-  width = pygame.display.set_mode((width, height))
+  window = pygame.display.set_mode((width, height))
   
   for i, (genome_id1, genome1) in enumerate(genomes):
     if i == len(genomes) - 1:
       break
     genome1.fittnes = 0
     for genome_id2, genome2 in genomes[i+1:]:         #same genome dos not play egainst itself
-      genome2.fitness = 0 if genomes2.fitness == None else genome2.fitness
-      game = PongGame(window, width, length)
-      game.train_ai(genome1, genome2, config)
+      genome2.fitness = 0 if genome2.fitness == None else genome2.fitness
+      train_ai(genome1, genome2, config, window, width, height)
   
   
   
 def run_neat(config):
   p = neat.Population(config)
-  p.add_reporter(neat.StdReporter(True))
+  p.add_reporter(neat.StdOutReporter(True))
   status = neat.StatisticsReporter()
   p.add_reporter(status)
   p.add_reporter(neat.Checkpointer(1))
