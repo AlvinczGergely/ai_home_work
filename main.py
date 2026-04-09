@@ -5,6 +5,20 @@ import neat
 import os
 
 
+class PongGame:
+    def __init__(self, window, width, height):
+        self.window = window
+        self.width = width
+        self.height = height
+
+        self.left_paddle = pygame.Rect(10, height/2 - 70, 10, 140)
+        self.right_paddle = pygame.Rect(width - 20, height/2 - 70, 10, 140)
+        self.ball = pygame.Rect(width/2 - 15, height/2 - 15, 30, 30)
+        
+        self.left_score = 0
+        self.right_score = 0
+        self.left_hits = 0
+        self.right_hits = 0
 def train_ai(self, genome1, genome2, copnfig):
   net1 = neat.nn.FeedForwardNetwork.create(genome1, config)
   net2 = neat.nn.FeedForwardNetwork.create(genome2, config)
