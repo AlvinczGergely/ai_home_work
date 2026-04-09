@@ -31,6 +31,14 @@ class PongGame:
                 self.right_paddle.y -= 7
             elif not up and self.right_paddle.bottom < self.height:
                 self.right_paddle.y += 7
+
+    def loop(self):
+        self._move_ball()
+        self._handle_collision()
+        return self
+
+
+
 def train_ai(self, genome1, genome2, copnfig):
   net1 = neat.nn.FeedForwardNetwork.create(genome1, config)
   net2 = neat.nn.FeedForwardNetwork.create(genome2, config)
