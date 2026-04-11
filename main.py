@@ -105,17 +105,17 @@ def train_ai(genome1, genome2, config, window, width, height):
     if decision1 == 0:
       pass
     elif decision1 == 1:
-      game.move_paddle(left=False, up=True)
+      game.move_paddle(left=True, up=True)
     else:
       game.move_paddle(left=True, up=False)
 
-    output2 = net1.activate((game.right_paddle.y, game.ball.y, abs(game.right_paddle.x - game.ball.x)))
+    output2 = net2.activate((game.right_paddle.y, game.ball.y, abs(game.right_paddle.x - game.ball.x)))
     decision2 = output2.index(max(output2))  
 
     if decision2 == 0:
       pass
     elif decision2 == 1:
-      game.move_paddle(left=True, up=True)
+      game.move_paddle(left=False, up=True)
     else:
       game.move_paddle(left=False, up=False)
 
