@@ -3,7 +3,22 @@ import sys
 import random
 import neat
 import os
+import matplotlib.pyplot as plt
 
+
+def plot_stats(statistics):
+    generation = range(len(statistics.most_fit_genomes))
+    best_fitness = [c.fitness for c in statistics.most_fit_genomes]
+    avg_fitness = statistics.get_fitness_mean()
+
+    plt.plot(generation, avg_fitness, label="average fitness")
+    plt.plot(generation, best_fitness, label="best fitness")
+    plt.title("generation learning curve")
+    plt.xlabel("generations")
+    plt.ylabel("fitness")
+    plt.grid()
+    plt.legend(loc="best")
+    plt.show()
 
 class PongGame:
     def __init__(self, window, width, height):
@@ -140,6 +155,9 @@ def run_neat(config):
   
   winner = p.run(eval_genomes, 50)
 
+  plot_stats(status)
+
+  
 if __name__== "__main__":
   local_dir = os.path.dirname(__file__)
   config_path = os.path.join(local_dir, "config.txt")
