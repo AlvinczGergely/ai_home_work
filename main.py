@@ -168,8 +168,8 @@ def train_ai(genome1, genome2, config, window, width, height):
 def calculate_fitness(genome1, genome2, game_info):
   genome1.fitness += game_info.left_hits * 2
   genome2.fitness += game_info.right_hits * 2
-  genome1.fitness -= game_info.right_score * 1
-  genome2.fitness -= game_info.left_score * 1
+  genome1.fitness -= game_info.right_score * 5
+  genome2.fitness -= game_info.left_score * 5
     
  
 def eval_genomes(genomes, config):
@@ -181,7 +181,8 @@ def eval_genomes(genomes, config):
       break
     genome1.fitness = 0
     for genome_id2, genome2 in genomes[i+1:]:         #same genome dos not play egainst itself
-      genome2.fitness = 0 if genome2.fitness == None else genome2.fitness
+      if genome2.fitness is None:
+        genome2.fitness = 0
       train_ai(genome1, genome2, config, window, width, height)
   
   

@@ -16,14 +16,14 @@ survival_threshold = 0.3
 
 [DefaultGenome]
 activation_default      = relu
-activation_mutate_rate  = 1.0
+activation_mutate_rate  = 0.0
 activation_options      = relu
 
 aggregation_default     = sum
 aggregation_mutate_rate = 0.0
 aggregation_options     = sum
 
-bias_init_mean          = 3.0
+bias_init_mean          = 0.0
 bias_init_stdev         = 1.0
 bias_max_value          = 30.0
 bias_min_value          = -30.0
