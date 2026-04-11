@@ -80,6 +80,7 @@ class PongGame:
 
     def draw(self, draw_score=True):
         self.window.fill((30, 30, 30))
+        pygame.draw.rect(self.window, (100, 100, 100), (self.width//2 - 2, 0, 4, self.height))
         pygame.draw.rect(self.window, (200, 200, 200), self.left_paddle)
         pygame.draw.rect(self.window, (200, 200, 200), self.right_paddle)
         pygame.draw.circle(self.window, (200, 200, 200), self.ball.center, 15)
