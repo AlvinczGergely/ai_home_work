@@ -4,6 +4,7 @@ import random
 import neat
 import os
 import matplotlib.pyplot as plt
+import pickle
 
 
 def plot_stats(statistics):
@@ -85,6 +86,36 @@ class PongGame:
         pygame.draw.rect(self.window, (200, 200, 200), self.right_paddle)
         pygame.draw.circle(self.window, (200, 200, 200), self.ball.center, 15)
         pygame.display.update()
+        
+    def test_ai(self, net):
+        clock = pygame.time.Clock()
+        run = True
+        while run:
+            clock.tick(60)
+            game_info = self.loop()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+                    break
+
+            output = net.activate((self.right_paddle.y, abs(
+                self.right_paddle.x - self.ball.x), self.ball.y))
+            decision = output.index(max(output))
+
+            if decision == 1:
+                self.move_paddle(left=False, up=True)
+            elif decision == 2:
+                self.move_paddle(left=False, up=False)
+
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_w]:
+                self.move_paddle(left=True, up=True)
+            elif keys[pygame.K_s]:
+                self.move_paddle(left=True, up=False)
+
+            self.draw(draw_score=True)
+            pygame.display.update()
 
 
 
@@ -155,10 +186,29 @@ def run_neat(config):
   p.add_reporter(neat.Checkpointer(1))
   
   winner = p.run(eval_genomes, 50)
-
+  with open("best.pickle", "wb") as f:
+    pickle.dump(winner, f)
+    
   plot_stats(status)
+    
+    
+    
+    
+def test_ai(config):
+  width, height = 700, 500
+  window = pygame.display.set_mode((width, height))
+  with open("best.pickle", "rb") as f:
+    winner = pickle.load(f)
+  winner_net = neat.nn.FeedForwardNetwork.create(winner, config) 
+    
+  width, height = 700, 500
+  win = pygame.display.set_mode((width, height))
+  pygame.display.set_caption("Pong")
+  pong = PongGame(win, width, height)
+  pong.test_ai(winner_net)
 
-  
+
+
 if __name__== "__main__":
   local_dir = os.path.dirname(__file__)
   config_path = os.path.join(local_dir, "config.txt")
