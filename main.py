@@ -162,6 +162,8 @@ def train_ai(genome1, genome2, config, window, width, height):
 def calculate_fitness(genome1, genome2, game_info):
   genome1.fitness += game_info.left_hits
   genome2.fitness += game_info.right_hits
+  genome1.fitness -= game_info.right_score * 5
+  genome2.fitness -= game_info.left_score * 5
     
  
 def eval_genomes(genomes, config):
