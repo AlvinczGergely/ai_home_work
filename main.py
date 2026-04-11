@@ -179,6 +179,7 @@ def eval_genomes(genomes, config):
   
   
 def run_neat(config):
+  #p = neat.Checkpointer.restore_checkpoint('res/learning_8_check_points/neat-checkpoint-11')
   p = neat.Population(config)
   p.add_reporter(neat.StdOutReporter(True))
   status = neat.StatisticsReporter()
@@ -217,5 +218,6 @@ if __name__== "__main__":
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_path)
   run_neat(config)
+  test_ai(config)
 
 
