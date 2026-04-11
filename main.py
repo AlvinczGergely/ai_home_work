@@ -155,15 +155,21 @@ def train_ai(genome1, genome2, config, window, width, height):
     #game.draw()
     #pygame.display.update()
     
+    if (game_info.left_score >= 1 or 
+    game_info.right_score >= 1 or 
+    game_info.left_hits + game_info.right_hits > 30):
+      calculate_fitness(genome1, genome2, game_info)
+      break
+    
     if game_info.left_score >= 1 or game_info.right_score >= 1 or game_info.left_hits + game_info.right_hits > 50:
       calculate_fitness(genome1, genome2, game_info)
       break
 
 def calculate_fitness(genome1, genome2, game_info):
-  genome1.fitness += game_info.left_hits
-  genome2.fitness += game_info.right_hits
-  genome1.fitness -= game_info.right_score * 5
-  genome2.fitness -= game_info.left_score * 5
+  genome1.fitness += game_info.left_hits * 2
+  genome2.fitness += game_info.right_hits * 2
+  genome1.fitness -= game_info.right_score * 1
+  genome2.fitness -= game_info.left_score * 1
     
  
 def eval_genomes(genomes, config):
