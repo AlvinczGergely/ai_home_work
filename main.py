@@ -99,8 +99,8 @@ class PongGame:
                     run = False
                     break
 
-            output = net.activate((self.right_paddle.y, abs(
-                self.right_paddle.x - self.ball.x), self.ball.y))
+            output = net.activate((self.right_paddle.y, self.ball.y,
+              abs(self.right_paddle.x - self.ball.x)))
             decision = output.index(max(output))
 
             if decision == 1:
@@ -119,9 +119,8 @@ class PongGame:
 
 
 
-def train_ai(genome1, genome2, config, window, width, height):
-  net1 = neat.nn.FeedForwardNetwork.create(genome1, config)
-  net2 = neat.nn.FeedForwardNetwork.create(genome2, config)
+def train_ai(genome, config, window, width, height, difficulty = 1):
+  net = neat.nn.FeedForwardNetwork.create(genome, config)
   game = PongGame(window, width, height)
   
   run = True
@@ -129,65 +128,52 @@ def train_ai(genome1, genome2, config, window, width, height):
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         quit()
+
+    srinking_paddle = max(5, int(15 / difficulty))
+    distance = min(700, int(350 * difficulty))
       
-    output1 = net1.activate((game.left_paddle.y, game.ball.y, abs(game.left_paddle.x - game.ball.x)))
-    decision1 = output1.index(max(output1))
+    if abs(game.ball.x - game.left_paddle.x) < distance:
+      if game.left_paddle.centery < game.ball.y - srinking_paddle:
+        game.move_paddle(left=True, up=False)
+      elif game.left_paddle.centery > game.ball.y + srinking_paddle:
+        game.move_paddle(left=True, up=True)
 
-    if decision1 == 0:
-      pass
-    elif decision1 == 1:
-      game.move_paddle(left=True, up=True)
-    else:
-      game.move_paddle(left=True, up=False)
-
-    output2 = net2.activate((game.right_paddle.y, game.ball.y, abs(game.right_paddle.x - game.ball.x)))
-    decision2 = output2.index(max(output2))  
-
-    if decision2 == 0:
-      pass
-    elif decision2 == 1:
+    output = net.activate((game.right_paddle.y, game.ball.y,
+      abs(game.right_paddle.x - game.ball.x)))
+    decision = output.index(max(output))
+    if decision == 1:
       game.move_paddle(left=False, up=True)
-    else:
+    elif decision == 2:
       game.move_paddle(left=False, up=False)
 
-
     game_info = game.loop()
-    #game.draw()
-    #pygame.display.update()
-    
-    if (game_info.left_score >= 1 or 
-    game_info.right_score >= 1 or 
-    game_info.left_hits + game_info.right_hits > 30):
-      calculate_fitness(genome1, genome2, game_info)
-      break
-    
-    if game_info.left_score >= 1 or game_info.right_score >= 1 or game_info.left_hits + game_info.right_hits > 50:
-      calculate_fitness(genome1, genome2, game_info)
+
+    if (game_info.left_score >= 5 or
+        game_info.right_score >= 5 or
+        game_info.left_hits + game_info.right_hits > 200):
+      calculate_fitness(genome, game_info)
       break
 
-def calculate_fitness(genome1, genome2, game_info):
-  genome1.fitness += game_info.left_hits * 2
-  genome2.fitness += game_info.right_hits * 2
-  genome1.fitness -= game_info.right_score * 5
-  genome2.fitness -= game_info.left_score * 5
+
+def calculate_fitness(genome, game_info):
+  genome.fitness += game_info.right_hits * 2
+  genome.fitness += game_info.right_score * 10
     
  
 def eval_genomes(genomes, config):
   width, height = 700, 500
   window = pygame.display.set_mode((width, height))
+  generation = p.generation
+  difficulty  = 1.0 + (generation / 50.0)
   
-  for i, (genome_id1, genome1) in enumerate(genomes):
-    if i == len(genomes) - 1:
-      break
-    genome1.fitness = 0
-    for genome_id2, genome2 in genomes[i+1:]:         #same genome dos not play egainst itself
-      if genome2.fitness is None:
-        genome2.fitness = 0
-      train_ai(genome1, genome2, config, window, width, height)
+  for genome_id, genome in genomes:
+    genome.fitness = 0
+    train_ai(genome, config, window, width, height, difficulty)
   
   
   
 def run_neat(config):
+  global p
   #p = neat.Checkpointer.restore_checkpoint('res/learning_8_check_points/neat-checkpoint-11')
   p = neat.Population(config)
   p.add_reporter(neat.StdOutReporter(True))
@@ -195,7 +181,7 @@ def run_neat(config):
   p.add_reporter(status)
   p.add_reporter(neat.Checkpointer(1))
   
-  winner = p.run(eval_genomes, 50)
+  winner = p.run(eval_genomes, 150)
   with open("best.pickle", "wb") as f:
     pickle.dump(winner, f)
     
